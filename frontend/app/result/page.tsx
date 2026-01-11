@@ -36,7 +36,7 @@ function ResultContent() {
     
     // Theme Colors
     // High Risk: Red // Low Risk: Green
-    const themeColor = isHighRisk ? [220, 38, 38] : [21, 128, 61]; 
+    const themeColor: [number, number, number] = isHighRisk ? [220, 38, 38] : [21, 128, 61]; 
 
     // Helper to load image
     const loadImage = (url: string): Promise<HTMLImageElement> => {
