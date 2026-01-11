@@ -2,6 +2,8 @@
 
 ### Cardio Disease Prediction System
 
+**[🚀 Live Demo](https://pulse-intel.vercel.app/)**
+
 ![Next.js](https://img.shields.io/badge/Next.js-14-black) ![FastAPI](https://img.shields.io/badge/FastAPI-0.95+-009688) ![Python](https://img.shields.io/badge/Python-3.9+-3776AB) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.0+-38B2AC) ![License](https://img.shields.io/badge/License-MIT-green)
 
 A comprehensive Machine Learning application designed to predict the risk of cardiovascular disease based on key health indicators. This project leverages a **Random Forest Classifier** deployed via a **FastAPI** backend, coupled with a modern, responsive **Next.js** frontend to provide a seamless user experience.
