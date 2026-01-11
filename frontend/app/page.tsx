@@ -113,7 +113,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">High Accuracy</h3>
                 <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-                  Our model achieves <span className="font-semibold text-blue-600 dark:text-blue-400">88.5% accuracy</span> using optimized Random Forest algorithms trained on over 70,000 validated clinical records.
+                  Our model achieves <span className="font-semibold text-blue-600 dark:text-blue-400">72.9% accuracy</span> using optimized Random Forest algorithms trained on over 70,000 validated clinical records.
                 </p>
             </motion.div>
 
