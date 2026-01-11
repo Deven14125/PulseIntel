@@ -78,7 +78,7 @@ function ResultContent() {
     // -- Watermark / Background Design --
     // Subtle medical cross in background
     doc.saveGraphicsState();
-    doc.setGState(new doc.GState({ opacity: 0.05 }));
+    doc.setGState(new (doc as any).GState({ opacity: 0.05 }));
     doc.setFillColor(themeColor[0], themeColor[1], themeColor[2]);
     doc.circle(pageWidth / 2, pageHeight / 2, 80, 'F'); // Central circle
     // Draw big cross
