@@ -1,99 +1,137 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Database, BrainCircuit, Activity, FileText } from "lucide-react";
+import { Database, FileSearch, GitBranch, Server, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 export default function Documentation() {
-  const steps = [
+  const pipelineSteps = [
     {
-      icon: <FileText className="w-8 h-8 text-blue-500" />,
-      title: "1. Data Collection",
-      description: "The system accepts user input across key health metrics: Age, Gender, Height, Weight, Systolic/Diastolic Blood Pressure, Cholesterol levels, Glucose levels, Smoking status, Alcohol consumption, and Physical Activity."
+      id: 1,
+      title: "Data Collection",
+      icon: <Database className="w-6 h-6 text-white" />,
+      color: "bg-blue-500",
+      description: "Aggregating raw clinical datasets containing key health metrics such as age, gender, systolic/diastolic blood pressure, cholesterol, and glucose levels.",
+      details: ["Source: Kaggle Medical Datasets", "Format: CSV/JSON", "Size: 70,000+ Records"]
     },
     {
-      icon: <BrainCircuit className="w-8 h-8 text-purple-500" />,
-      title: "2. Machine Learning Analysis",
-      description: "Your data is processed by our trained Random Forest Classifier. This model has analyzed thousands of historical patient records to identify patterns and correlations associated with cardiovascular disease."
+      id: 2,
+      title: "Preprocessing & EDA",
+      icon: <FileSearch className="w-6 h-6 text-white" />,
+      color: "bg-purple-500",
+      description: "Exploratory Data Analysis (EDA) to understand distributions. Cleaning data by handling missing values, removing duplicates, and normalizing scales.",
+      details: ["Outlier Detection", "Feature Scaling", "Correlation Heatmaps"]
     },
     {
-      icon: <Activity className="w-8 h-8 text-red-500" />,
-      title: "3. Feature Engineering",
-      description: "The system automatically calculates derived metrics like Body Mass Index (BMI) and Pulse Pressure to enhance prediction accuracy, mimicking the diagnostic process of a cardiologist."
+      id: 3,
+      title: "Model Training",
+      icon: <GitBranch className="w-6 h-6 text-white" />,
+      color: "bg-green-500",
+      description: "Training the Random Forest Classifier. This ensemble learning method constructs a multitude of decision trees to improve predictive accuracy and control over-fitting.",
+      details: ["Algorithm: Random Forest", "Library: Scikit-Learn", "Grid Search CV Tuning"]
     },
     {
-      icon: <Database className="w-8 h-8 text-green-500" />,
-      title: "4. Risk Assessment",
-      description: "The model outputs a probability score. Scores above a calibrated threshold indicate a higher statistical likelihood of heart disease presence, prompting a 'High Risk' warning."
+      id: 4,
+      title: "Deployment & Inference",
+      icon: <Server className="w-6 h-6 text-white" />,
+      color: "bg-red-500",
+      description: "The trained model is serialized and deployed via a FastAPI backend. It exposes REST endpoints to accept real-time user data and return instant risk predictions.",
+      details: ["Framework: FastAPI", "Containerization: Docker", "Latency: <100ms"]
     }
   ];
 
   return (
-    <div className="min-h-screen bg-transparent py-20">
-      <div className="container mx-auto px-4 max-w-5xl">
+    <div className="min-h-screen bg-transparent py-20 overflow-hidden">
+      <div className="container mx-auto px-4 max-w-6xl">
+        
+        {/* Header */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
-           className="text-center mb-16"
+           className="text-center mb-20"
         >
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-pink-600 mb-6">
-            Documentation
+           <span className="px-4 py-1.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-300 text-sm font-semibold tracking-wider uppercase mb-4 inline-block">
+                Technical Deep Dive
+            </span>
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            Model Documentation
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Understanding the technology behind VitalSense AI. How we turn health data into actionable insights.
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            A comprehensive look at the pipeline powering PulseIntel, from raw data to real-time AI predictions.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-20">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="p-8 rounded-2xl bg-white/60 dark:bg-gray-900/60 backdrop-blur-md border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-shadow"
-            >
-              <div className="mb-4 bg-white dark:bg-gray-800 w-16 h-16 rounded-xl flex items-center justify-center shadow-sm">
-                {step.icon}
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                {step.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                {step.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-3xl p-8 md:p-12 shadow-2xl overflow-hidden relative"
+        {/* Model Info Card */}
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl p-8 rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 mb-24 max-w-4xl mx-auto"
         >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500 rounded-full blur-[100px] opacity-20 pointer-events-none" />
-            
-            <h2 className="text-3xl font-bold mb-6 relative z-10">Technical Architecture</h2>
-            <div className="grid md:grid-cols-2 gap-8 relative z-10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div>
-                    <h3 className="text-xl font-semibold mb-4 text-red-400">Frontend</h3>
-                    <ul className="space-y-2 text-gray-300">
-                        <li>• Next.js 14 (App Router)</li>
-                        <li>• Tailwind CSS for Styling</li>
-                        <li>• Framer Motion for Animations</li>
-                        <li>• TypeScript for Type Safety</li>
-                    </ul>
+                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Random Forest Classifier</h2>
+                     <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                        PulseIntel extracts the power of Ensemble Learning using the Random Forest algorithm. By averaging multiple decision trees, we achieve higher accuracy and stability compared to single-tree models.
+                     </p>
+                     <div className="flex gap-4">
+                        <Link href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html" target="_blank" className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+                            Official Scikit-Learn Docs <ExternalLink className="w-4 h-4" />
+                        </Link>
+                     </div>
                 </div>
-                <div>
-                    <h3 className="text-xl font-semibold mb-4 text-blue-400">Backend</h3>
-                    <ul className="space-y-2 text-gray-300">
-                        <li>• FastAPI (Python)</li>
-                        <li>• Scikit-Learn (ML Model)</li>
-                        <li>• Pandas & NumPy (Data Processing)</li>
-                        <li>• Uvicorn (ASGI Server)</li>
-                    </ul>
+                <div className="bg-gray-100 dark:bg-gray-900/50 p-6 rounded-2xl min-w-[200px] text-center border border-gray-200 dark:border-gray-700">
+                    <div className="text-sm text-gray-500 mb-1">Model Accuracy</div>
+                    <div className="text-4xl font-bold text-green-600 dark:text-green-400">72.9%</div>
+                    <div className="text-xs text-gray-400 mt-2">Validated on Test Set</div>
                 </div>
             </div>
         </motion.div>
+
+        {/* Pipeline / Roadmap Section */}
+        <div className="relative max-w-4xl mx-auto">
+            {/* Center Line */}
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gray-200 dark:bg-gray-700 -translate-x-1/2 hidden md:block" />
+            
+            {/* Steps */}
+            <div className="space-y-12 md:space-y-24">
+                {pipelineSteps.map((step, index) => (
+                    <motion.div 
+                        key={step.id}
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        className={`flex flex-col md:flex-row items-center gap-8 ${
+                            index % 2 === 0 ? "md:flex-row-reverse text-right" : ""
+                        }`}
+                    >
+                        {/* Content Side */}
+                        <div className={`flex-1 w-full md:w-1/2 ${index % 2 === 0 ? "md:text-right pl-12 md:pl-0" : "pl-12 md:pl-0"}`}>
+                             <div className={`inline-flex items-center justify-center p-3 rounded-xl shadow-lg mb-4 ${step.color}`}>
+                                {step.icon}
+                             </div>
+                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">{step.title}</h3>
+                             <p className="text-gray-600 dark:text-gray-300 mb-4">{step.description}</p>
+                             
+                             <div className={`flex flex-wrap gap-2 ${index % 2 === 0 ? "md:justify-end" : "justify-start"}`}>
+                                {step.details.map((detail, i) => (
+                                    <span key={i} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium border border-gray-200 dark:border-gray-700">
+                                        {detail}
+                                    </span>
+                                ))}
+                             </div>
+                        </div>
+
+                        {/* Center Dot (Desktop Only) */}
+                        <div className="absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full border-4 border-white dark:border-gray-900 bg-red-500 hidden md:block z-10 shadow-lg"></div>
+
+                        {/* Analysis/Visual Side (Empty for balance on desktop) */}
+                        <div className="flex-1 hidden md:block"></div>
+                    </motion.div>
+                ))}
+            </div>
+        </div>
+
       </div>
     </div>
   );

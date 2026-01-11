@@ -46,21 +46,29 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-5xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight"
+          className="text-6xl md:text-8xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight"
         >
-          Protect Your <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-600">
-            Heart Health
-          </span>
+          PulseIntel
         </motion.h1>
+
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-3xl md:text-5xl font-bold mb-6"
+        >
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-600">
+            Protect Your Heart Health
+          </span>
+        </motion.div>
 
         <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.4 }}
             className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mb-10 leading-relaxed"
         >
-            Advanced AI prediction models to assess your cardiovascular risk factors instantly. Early detection saves lives.
+            Advanced AI prediction models to assess your cardiovascular risk factors instantly.
         </motion.p>
 
         <motion.div

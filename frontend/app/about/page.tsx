@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, Github, Linkedin, Mail } from "lucide-react";
+import { User, Github, Linkedin, Mail } from "lucide-react";
 
 export default function About() {
   return (
@@ -13,7 +13,7 @@ export default function About() {
           className="text-center mb-16"
         >
           <div className="w-24 h-24 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Users className="w-12 h-12 text-red-600" />
+            <User className="w-12 h-12 text-red-600" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             About The Project
@@ -23,40 +23,66 @@ export default function About() {
           </p>
         </motion.div>
 
-        <div className="space-y-8">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md border-l-4 border-red-500">
-                <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Mission</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Cardiovascular diseases remain the leading cause of death globally. Our mission is to democratize access to early risk detection. 
-                    By identifying potential heart health issues before they become critical, we empower individuals to take proactive steps towards a longer, healthier life. 
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+        >
+            <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-lg border-l-8 border-red-500 hover:shadow-xl transition-all duration-300">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white">The Mission</h3>
+                <p className="text-gray-700 dark:text-gray-200 leading-relaxed text-base md:text-lg">
+                    Cardiovascular diseases remain the leading cause of death globally. My mission is to democratize access to early risk detection. 
+                    By identifying potential heart health issues before they become critical, I aim to empower individuals to take proactive steps towards a longer, healthier life. 
                     This tool is designed to be an accessible first step in preventative healthcare.
                 </p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md transform hover:-translate-y-1 transition duration-300">
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">The Tech Stack</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
+                <motion.div 
+                    whileHover={{ y: -5 }}
+                    className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/30"
+                >
+                    <h3 className="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                         The Tech Stack
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
                         Built for speed and reliability, our architecture ensures your data is processed instantly and securely:
                     </p>
-                     <ul className="list-disc list-inside mt-4 space-y-2 text-gray-600 dark:text-gray-300">
-                        <li><strong>Next.js 14:</strong> For a seamless, reactive user interface.</li>
-                        <li><strong>FastAPI:</strong> Handling complex model inference with minimal latency.</li>
-                        <li><strong>Scikit-Learn:</strong> Utilizing robust Random Forest algorithms.</li>
-                        <li><strong>Tailwind CSS:</strong> Ensuring a beautiful, accessible design.</li>
+                     <ul className="space-y-3 text-gray-600 dark:text-gray-300">
+                        <li className="flex items-center gap-2">
+                             <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                             <strong>Next.js 14:</strong> Seamless UI
+                        </li>
+                        <li className="flex items-center gap-2">
+                             <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                             <strong>FastAPI:</strong> Rapid Inference
+                        </li>
+                        <li className="flex items-center gap-2">
+                             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                             <strong>Scikit-Learn:</strong> Robust AI
+                        </li>
+                        <li className="flex items-center gap-2">
+                             <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                             <strong>Tailwind:</strong> Modern Design
+                        </li>
                     </ul>
-                </div>
-                 <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md transform hover:-translate-y-1 transition duration-300">
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Team</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        We are a group of data scientists and developers passionate about healthcare innovation.
+                </motion.div>
+                 
+                 <motion.div 
+                    whileHover={{ y: -5 }}
+                    className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md p-8 rounded-3xl shadow-lg border border-white/20 dark:border-gray-700/30"
+                >
+                    <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">The Creator</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-lg">
+                        I am <span className="font-bold text-red-600 dark:text-red-400">Deven Machchhar</span>, a developer passionate about healthcare innovation and AI.
                     </p>
                     <p className="text-gray-600 dark:text-gray-300">
-                        This project was developed as part of our research into applied Machine Learning in Diagnostics (SEM-6 Studies). We believe open-source tools can revolutionize patient care.
+                        This project was developed as part of research into applied Machine Learning in Diagnostics. I believe open-source tools can revolutionize patient care and make health insights accessible to everyone.
                     </p>
-                </div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
 
         <div className="mt-16 text-center">
             <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Connect Details</h3>

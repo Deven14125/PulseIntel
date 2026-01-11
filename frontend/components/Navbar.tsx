@@ -42,7 +42,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <Heart className="w-8 h-8 text-red-600 fill-red-600 transition-transform group-hover:scale-110" />
-          <span className={`text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-pink-600 ${isScrolled ? '' : 'text-gray-900 dark:text-white'}`}>
+          <span className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-pink-600">
             PulseIntel
           </span>
         </Link>

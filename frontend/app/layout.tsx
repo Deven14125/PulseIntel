@@ -5,6 +5,7 @@ import { ThemeProvider } from "./providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackgroundAnimation from "@/components/BackgroundAnimation";
+import SplashScreen from "@/components/SplashScreen";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <SplashScreen />
             <BackgroundAnimation />
             <Navbar />
             <div className="pt-20 min-h-screen flex flex-col"> {/* Add padding for fixed navbar */}
