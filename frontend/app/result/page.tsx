@@ -157,7 +157,7 @@ function ResultContent() {
             1: { halign: 'center' },
             2: { halign: 'center', fontStyle: 'italic' }
         },
-        styles: { fontSize: 10, cellPadding: 5, textColor: [50, 50, 50], rowPageBreak: 'avoid' },
+        styles: { fontSize: 10, cellPadding: 5, textColor: [50, 50, 50] },
         didParseCell: function(data) {
             if (data.section === 'body' && data.column.index === 2) {
                 if (data.cell.raw === 'Elevated' || data.cell.raw === 'High Risk' || data.cell.raw === 'Risk Factor') {
