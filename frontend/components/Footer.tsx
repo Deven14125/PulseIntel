@@ -69,19 +69,19 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Connect</h3>
             <div className="flex gap-4">
-              <Link href="https://github.com" target="_blank" className="p-2 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+              <Link href="https://github.com/Deven14125" target="_blank" className="p-2 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
                 <Github className="w-5 h-5" />
               </Link>
               <Link href="https://twitter.com" target="_blank" className="p-2 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
                 <Twitter className="w-5 h-5" />
               </Link>
-              <Link href="https://linkedin.com" target="_blank" className="p-2 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+              <Link href="https://www.linkedin.com/in/deven-machchhar-b13287286/" target="_blank" className="p-2 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
                 <Linkedin className="w-5 h-5" />
               </Link>
             </div>
             <div className="mt-6 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
               <Mail className="w-4 h-4" />
-              <span>contact@vitalsense.ai</span>
+              <span>deven81281298@gmail.com</span>
             </div>
           </div>
         </div>
