@@ -2,9 +2,11 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { CheckCircle, AlertTriangle, RefreshCcw, ArrowLeft, Activity } from "lucide-react";
+import { CheckCircle, AlertTriangle, RefreshCcw, ArrowLeft, Activity, Download } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 function ResultContent() {
   const searchParams = useSearchParams();
@@ -13,6 +15,246 @@ function ResultContent() {
   const prediction = searchParams.get("prediction");
   const resultText = searchParams.get("result");
   const bmi = searchParams.get("bmi");
+
+  // Input Data for Report
+  const age = searchParams.get("age");
+  const gender = searchParams.get("gender");
+  const height = searchParams.get("height");
+  const weight = searchParams.get("weight");
+  const ap_hi = searchParams.get("ap_hi");
+  const ap_lo = searchParams.get("ap_lo");
+  const cholesterol = searchParams.get("cholesterol");
+  const glucose = searchParams.get("glucose");
+  const smoke = searchParams.get("smoke");
+  const alcohol = searchParams.get("alcohol");
+  const active = searchParams.get("active");
+
+  const handleDownload = async () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    
+    // Theme Colors
+    // High Risk: Red // Low Risk: Green
+    const themeColor = isHighRisk ? [220, 38, 38] : [21, 128, 61]; 
+
+    // Helper to load image
+    const loadImage = (url: string): Promise<HTMLImageElement> => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = url;
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(img); // Resolve anyway to avoid breaking flow
+        });
+    };
+
+    // Load Assets (Using reliable Wikimedia Commons public domain URLs)
+    // Doctor Icon
+    const doctorImg = await loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Crystal_Clear_app_doctor.png/256px-Crystal_Clear_app_doctor.png");
+    // Caduceus / Medical Symbol
+    const medicalToolImg = await loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Caduceus.svg/454px-Caduceus.svg.png");
+    // Stethoscope
+    const stethoscopeImg = await loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Stethoscope_icon.svg/1024px-Stethoscope_icon.svg.png");
+
+    // -- Header Section --
+    doc.setFillColor(themeColor[0], themeColor[1], themeColor[2]);
+    doc.rect(0, 0, pageWidth, 50, 'F');
+    
+    // Add Medical Symbol to Header
+    try {
+        doc.addImage(medicalToolImg, 'PNG', pageWidth - 40, 5, 30, 40);
+    } catch (e) { console.log('Error adding tool image', e) }
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(26);
+    doc.setFont("helvetica", "bold");
+    doc.text("PulseIntel", 20, 25);
+    
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "normal");
+    doc.text("Medical Risk Assessment Report", 20, 35);
+    
+    // -- Watermark / Background Design --
+    // Subtle medical cross in background
+    doc.saveGraphicsState();
+    doc.setGState(new doc.GState({ opacity: 0.05 }));
+    doc.setFillColor(themeColor[0], themeColor[1], themeColor[2]);
+    doc.circle(pageWidth / 2, pageHeight / 2, 80, 'F'); // Central circle
+    // Draw big cross
+    const cx = pageWidth / 2;
+    const cy = pageHeight / 2;
+    doc.rect(cx - 20, cy - 60, 40, 120, 'F');
+    doc.rect(cx - 60, cy - 20, 120, 40, 'F');
+    doc.restoreGraphicsState();
+
+
+    // -- Patient Info & Meta --
+    doc.setTextColor(80, 80, 80);
+    doc.setFontSize(10);
+    doc.text(`Report Date: ${new Date().toLocaleDateString()}`, 20, 65);
+    doc.text(`Reference ID: #${Math.floor(Math.random() * 1000000)}`, 20, 70);
+
+    // -- Patient Profile Table --
+    doc.setTextColor(themeColor[0], themeColor[1], themeColor[2]);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("PATIENT VITALS & PROFILE", 20, 85);
+    
+    autoTable(doc, {
+        startY: 90,
+        head: [['Metric', 'Value', 'Metric', 'Value']],
+        body: [
+            ['Age', `${age || "N/A"} Years`, 'Gender', gender || "N/A"],
+            ['Height', `${height || "N/A"} cm`, 'Weight', `${weight || "N/A"} kg`],
+            ['BMI', parseFloat(bmi || "0").toFixed(1), 'Activity', active === "Yes" ? "Active" : "Sedentary"],
+        ],
+        theme: 'grid',
+        headStyles: { 
+            fillColor: [255, 255, 255], 
+            textColor: themeColor, 
+            lineColor: themeColor, 
+            lineWidth: 0.1,
+            fontStyle: 'bold'
+        },
+        styles: { 
+            fontSize: 10, 
+            cellPadding: 6, 
+            textColor: [60, 60, 60],
+            lineColor: [230, 230, 230],
+            lineWidth: 0.1
+        },
+        columnStyles: { 
+            0: { fontStyle: 'bold', cellWidth: 35, fillColor: [250, 250, 250] }, 
+            2: { fontStyle: 'bold', cellWidth: 35, fillColor: [250, 250, 250] } 
+        }
+    });
+
+    // -- Clinical Analysis --
+    let finalY = (doc as any).lastAutoTable.finalY + 15;
+    doc.text("CLINICAL INDICATORS", 20, finalY);
+
+    autoTable(doc, {
+        startY: finalY + 5,
+        head: [['Parameter', 'Measurement', 'Clinical Eval.']],
+        body: [
+            ['Systolic BP', `${ap_hi || "N/A"} mmHg`, (Number(ap_hi) > 130) ? 'Elevated' : 'Normal'],
+            ['Diastolic BP', `${ap_lo || "N/A"} mmHg`, (Number(ap_lo) > 80) ? 'Elevated' : 'Normal'],
+            ['Cholesterol', cholesterol || "N/A", cholesterol === 'Normal' ? 'Normal' : 'High Risk'],
+            ['Glucose', glucose || "N/A", glucose === 'Normal' ? 'Normal' : 'High Risk'],
+            ['Smoking', smoke || "N/A", smoke === 'Yes' ? 'Risk Factor' : 'None'],
+            ['Alcohol', alcohol || "N/A", alcohol === 'Yes' ? 'Risk Factor' : 'None'],
+        ],
+        theme: 'plain',
+        headStyles: { 
+            fillColor: themeColor, 
+            textColor: 255, 
+            fontStyle: 'bold',
+            halign: 'center'
+        },
+        columnStyles: {
+            0: { fontStyle: 'bold' },
+            1: { halign: 'center' },
+            2: { halign: 'center', fontStyle: 'italic' }
+        },
+        styles: { fontSize: 10, cellPadding: 5, textColor: [50, 50, 50], rowPageBreak: 'avoid' },
+        didParseCell: function(data) {
+            if (data.section === 'body' && data.column.index === 2) {
+                if (data.cell.raw === 'Elevated' || data.cell.raw === 'High Risk' || data.cell.raw === 'Risk Factor') {
+                    data.cell.styles.textColor = [220, 38, 38]; // Red for bad
+                } else {
+                    data.cell.styles.textColor = [21, 128, 61]; // Green for good
+                }
+            }
+        }
+    });
+
+    // -- Doctor's Assessment Box --
+    finalY = (doc as any).lastAutoTable.finalY + 20;
+
+    // Check if we need a new page for the assessment
+    if (finalY + 60 > pageHeight) {
+        doc.addPage();
+        finalY = 20;
+    }
+
+    // Decoration Line with Heartbeat
+    doc.setDrawColor(themeColor[0], themeColor[1], themeColor[2]);
+    doc.setLineWidth(0.5);
+    doc.line(20, finalY, 50, finalY);
+    doc.line(50, finalY, 55, finalY - 5); // Heartbeat up
+    doc.line(55, finalY - 5, 60, finalY + 5); // Heartbeat down
+    doc.line(60, finalY + 5, 65, finalY); // Back
+    doc.line(65, finalY, pageWidth - 20, finalY);
+
+    finalY += 15;
+
+    // Doctor Icon & Result
+    try {
+        // Keep aspect ratio for doctor image
+        doc.addImage(doctorImg, 'PNG', 20, finalY, 25, 25);
+    } catch(e) {}
+
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.text("AI ASSESSMENT RESULT", 55, finalY + 8);
+
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(themeColor[0], themeColor[1], themeColor[2]);
+    doc.text(resultText ? resultText.toUpperCase() : "UNKNOWN", 55, finalY + 18);
+
+    // Dynamic height for recommendation text
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(60, 60, 60);
+    
+    const recommendation = isHighRisk 
+    ? "Evaluation indicates a higher probability of cardiovascular issues. Immediate consultation with a specialist is recommended. Please monitor saturated fat intake, exercise regularly, and track blood pressure." 
+    : "Evaluation indicates a lower probability of cardiovascular disease. Maintain your current healthy lifestyle, balanced diet, and regular exercise routine. Annual check-ups are advised.";
+    
+    // Split text to fit width
+    const textLines = doc.splitTextToSize(`" ${recommendation} "`, pageWidth - 40);
+    doc.text(textLines, pageWidth / 2, finalY + 35, { align: "center" });
+
+    // -- Signature Section --
+    const signatureBlockHeight = 40;
+    // Check if signature fits on page, else add new page
+    if (finalY + 35 + (textLines.length * 5) + signatureBlockHeight > pageHeight) {
+         doc.addPage();
+         // Reset Y for new page
+         // sigY will be calculated relative to page bottom anyway, but we ensure we are on a clean page
+    }
+    
+    const sigY = pageHeight - 40;
+    
+    // Add Stethoscope Image near bottom as design element
+    try {
+        doc.addImage(stethoscopeImg, 'PNG', 20, sigY - 20, 30, 30);
+    } catch(e) {}
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    doc.text("__________________________", pageWidth - 70, sigY);
+    
+    // Signature in Cursive-like font (Times Italic with blue ink)
+    doc.setFont("times", "italic");
+    doc.setFontSize(22);
+    doc.setTextColor(0, 50, 150); // Blue ink color
+    doc.text("machchhardk", pageWidth - 60, sigY - 2);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text("Authorized Signature", pageWidth - 65, sigY + 5);
+    
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text("Generated by PulseIntel Medical AI • Not for clinical diagnosis", pageWidth / 2, pageHeight - 10, { align: "center" });
+    
+    doc.save(`PulseIntel-Medical-Report-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
 
   // If no data, redirect back to predict
   if (!prediction || !resultText) {
@@ -95,13 +337,13 @@ function ResultContent() {
                     onClick={() => router.push('/predict')}
                     className="px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-bold hover:shadow-lg transition flex items-center justify-center gap-2"
                 >
-                    <ArrowLeft className="w-5 h-5" /> Back to Predict
+                    <ArrowLeft className="w-5 h-5" /> Back
                 </button>
                 <button 
-                    onClick={() => router.push('/predict')}
+                    onClick={handleDownload}
                     className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold hover:shadow-lg transition flex items-center justify-center gap-2"
                 >
-                    <RefreshCcw className="w-5 h-5" /> Predict Another
+                    <Download className="w-5 h-5" /> Download Report
                 </button>
             </div>
         </div>

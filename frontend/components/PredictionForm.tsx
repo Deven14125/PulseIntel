@@ -63,6 +63,9 @@ export default function PredictionForm() {
         prediction: response.data.prediction.toString(),
         result: response.data.result,
         bmi: response.data.bmi.toString(),
+        ...Object.fromEntries(
+          Object.entries(formData).map(([key, value]) => [key, value.toString()])
+        )
       }).toString();
       
       router.push(`/result?${queryParams}`);
