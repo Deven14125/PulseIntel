@@ -58,7 +58,7 @@ export default function PredictionForm() {
     setError(null);
 
     try {
-      const response = await axios.post("http://localhost:8000/predict", formData);
+      const response = await axios.post("https://pulseintel-backend.onrender.com/predict", formData);
       const queryParams = new URLSearchParams({
         prediction: response.data.prediction.toString(),
         result: response.data.result,
